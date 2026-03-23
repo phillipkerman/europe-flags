@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>European Flag Flashcards</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --parchment: #f5f0e8;
+    --gold: #c8a951;
+    --gold-light: #e8d08a;
+    --red: #8b2635;
+    --shadow: rgba(26,26,46,0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    background: var(--ink);
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(200,169,81,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(139,38,53,0.1) 0%, transparent 50%),
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c8a951' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    font-family: 'Crimson Pro', serif;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    color: var(--gold);
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+  }
+
+  header p {
+    color: rgba(245,240,232,0.45);
+    font-size: 1rem;
+    font-style: italic;
+    margin-top: 0.4rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* Progress bar */
+  .progress-wrap {
+    width: min(480px, 90vw);
+    margin-bottom: 1.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .progress-label {
+    color: var(--gold-light);
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: right;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .progress-track {
+    height: 3px;
+    background: rgba(200,169,81,0.15);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--red), var(--gold));
+    border-radius: 2px;
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* Card */
+  .card-stage {
+    perspective: 1200px;
+    width: min(480px, 90vw);
+  }
+
+  .card {
+    width: 100%;
+    aspect-ratio: 3/2;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.7s cubic-bezier(.4,0,.2,1);
+    cursor: pointer;
+  }
+
+  .card.flipped { transform: rotateY(180deg); }
+
+  .card-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 24px 60px var(--shadow), 0 0 0 1px rgba(200,169,81,0.2);
+  }
+
+  .card-front {
+    background: var(--parchment);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-front img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 1rem;
+  }
+
+  /* Corner ornaments */
+  .card-front::before, .card-front::after {
+    content: '✦';
+    position: absolute;
+    color: rgba(200,169,81,0.25);
+    font-size: 0.7rem;
+  }
+  .card-front::before { top: 8px; left: 10px; }
+  .card-front::after  { bottom: 8px; right: 10px; }
+
+  .card-back {
+    background: var(--ink);
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    border: 1px solid rgba(200,169,81,0.25);
+  }
+
+  .country-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 6vw, 3rem);
+    color: var(--gold);
+    letter-spacing: 0.03em;
+    text-align: center;
+    padding: 0 1rem;
+    line-height: 1.2;
+  }
+
+  .country-flag-emoji {
+    font-size: 2rem;
+    opacity: 0.6;
+  }
+
+  .back-hint {
+    font-size: 0.8rem;
+    color: rgba(245,240,232,0.3);
+    font-style: italic;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  button {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 3px;
+    padding: 0.7rem 1.6rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-reveal {
+    background: linear-gradient(135deg, var(--gold) 0%, #a8862e 100%);
+    color: var(--ink);
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(200,169,81,0.3);
+  }
+
+  .btn-reveal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(200,169,81,0.4);
+  }
+
+  .btn-next {
+    background: transparent;
+    color: var(--gold-light);
+    border: 1px solid rgba(200,169,81,0.4);
+  }
+
+  .btn-next:hover {
+    background: rgba(200,169,81,0.08);
+    border-color: var(--gold);
+    transform: translateY(-2px);
+  }
+
+  .btn-shuffle {
+    background: transparent;
+    color: rgba(245,240,232,0.4);
+    border: 1px solid rgba(245,240,232,0.15);
+    font-size: 0.8rem;
+  }
+
+  .btn-shuffle:hover {
+    color: rgba(245,240,232,0.7);
+    border-color: rgba(245,240,232,0.3);
+  }
+
+  /* Score */
+  .score-row {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .score-item {
+    text-align: center;
+  }
+
+  .score-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: var(--gold);
+    display: block;
+    line-height: 1;
+  }
+
+  .score-label {
+    font-size: 0.7rem;
+    color: rgba(245,240,232,0.35);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .score-divider {
+    width: 1px;
+    height: 2rem;
+    background: rgba(200,169,81,0.2);
+  }
+
+  /* Completion */
+  .completion {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .completion.show { display: flex; }
+
+  .completion h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--gold);
+    font-size: 2rem;
+  }
+
+  .completion p {
+    color: rgba(245,240,232,0.6);
+    font-style: italic;
+  }
+
+  /* Keyboard hint */
+  .kbd-hint {
+    margin-top: 1.2rem;
+    color: rgba(245,240,232,0.2);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-align: center;
+  }
+
+  kbd {
+    background: rgba(245,240,232,0.08);
+    border: 1px solid rgba(245,240,232,0.15);
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-family: monospace;
+    font-size: 0.7rem;
+  }
+
+  @media (max-width: 520px) {
+    .controls { gap: 0.7rem; }
+    button { padding: 0.65rem 1.1rem; font-size: 0.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>European Flag Flashcards</h1>
+  <p>Test your knowledge of the continent</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-label" id="progressLabel">1 of 45</div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+</div>
+
+<div class="card-stage" id="cardStage">
+  <div class="card" id="card">
+    <div class="card-face card-front">
+      <img id="flagImg" src="" alt="Country flag">
+    </div>
+    <div class="card-face card-back">
+      <span class="country-flag-emoji" id="flagEmoji"></span>
+      <div class="country-name" id="countryName"></div>
+      <div class="back-hint">click card or press space to continue</div>
+    </div>
+  </div>
+</div>
+
+<div class="controls">
+  <button class="btn-reveal" id="btnReveal" onclick="revealAnswer()">Reveal Answer</button>
+  <button class="btn-next" id="btnNext" onclick="nextCard()" style="display:none">Next Card →</button>
+  <button class="btn-shuffle" onclick="shuffleDeck()">⇄ Shuffle</button>
+</div>
+
+<div class="score-row">
+  <div class="score-item">
+    <span class="score-num" id="seenCount">0</span>
+    <span class="score-label">Seen</span>
+  </div>
+  <div class="score-divider"></div>
+  <div class="score-item">
+    <span class="score-num" id="remainCount">45</span>
+    <span class="score-label">Remaining</span>
+  </div>
+</div>
+
+<div class="kbd-hint">
+  <kbd>Space</kbd> reveal &nbsp;·&nbsp; <kbd>→</kbd> next &nbsp;·&nbsp; <kbd>S</kbd> shuffle
+</div>
+
+<script>
+// --- Flag data: using flagcdn.com (free, no auth required) ---
+const countries = [
+  { name: "Albania",          code: "al", emoji: "🇦🇱" },
+  { name: "Andorra",          code: "ad", emoji: "🇦🇩" },
+  { name: "Austria",          code: "at", emoji: "🇦🇹" },
+  { name: "Belarus",          code: "by", emoji: "🇧🇾" },
+  { name: "Belgium",          code: "be", emoji: "🇧🇪" },
+  { name: "Bosnia & Herzegovina", code: "ba", emoji: "🇧🇦" },
+  { name: "Bulgaria",         code: "bg", emoji: "🇧🇬" },
+  { name: "Croatia",          code: "hr", emoji: "🇭🇷" },
+  { name: "Cyprus",           code: "cy", emoji: "🇨🇾" },
+  { name: "Czech Republic",   code: "cz", emoji: "🇨🇿" },
+  { name: "Denmark",          code: "dk", emoji: "🇩🇰" },
+  { name: "Estonia",          code: "ee", emoji: "🇪🇪" },
+  { name: "Finland",          code: "fi", emoji: "🇫🇮" },
+  { name: "France",           code: "fr", emoji: "🇫🇷" },
+  { name: "Germany",          code: "de", emoji: "🇩🇪" },
+  { name: "Greece",           code: "gr", emoji: "🇬🇷" },
+  { name: "Hungary",          code: "hu", emoji: "🇭🇺" },
+  { name: "Iceland",          code: "is", emoji: "🇮🇸" },
+  { name: "Ireland",          code: "ie", emoji: "🇮🇪" },
+  { name: "Italy",            code: "it", emoji: "🇮🇹" },
+  { name: "Kosovo",           code: "xk", emoji: "🇽🇰" },
+  { name: "Latvia",           code: "lv", emoji: "🇱🇻" },
+  { name: "Liechtenstein",    code: "li", emoji: "🇱🇮" },
+  { name: "Lithuania",        code: "lt", emoji: "🇱🇹" },
+  { name: "Luxembourg",       code: "lu", emoji: "🇱🇺" },
+  { name: "Malta",            code: "mt", emoji: "🇲🇹" },
+  { name: "Moldova",          code: "md", emoji: "🇲🇩" },
+  { name: "Monaco",           code: "mc", emoji: "🇲🇨" },
+  { name: "Montenegro",       code: "me", emoji: "🇲🇪" },
+  { name: "Netherlands",      code: "nl", emoji: "🇳🇱" },
+  { name: "North Macedonia",  code: "mk", emoji: "🇲🇰" },
+  { name: "Norway",           code: "no", emoji: "🇳🇴" },
+  { name: "Poland",           code: "pl", emoji: "🇵🇱" },
+  { name: "Portugal",         code: "pt", emoji: "🇵🇹" },
+  { name: "Romania",          code: "ro", emoji: "🇷🇴" },
+  { name: "Russia",           code: "ru", emoji: "🇷🇺" },
+  { name: "San Marino",       code: "sm", emoji: "🇸🇲" },
+  { name: "Serbia",           code: "rs", emoji: "🇷🇸" },
+  { name: "Slovakia",         code: "sk", emoji: "🇸🇰" },
+  { name: "Slovenia",         code: "si", emoji: "🇸🇮" },
+  { name: "Spain",            code: "es", emoji: "🇪🇸" },
+  { name: "Sweden",           code: "se", emoji: "🇸🇪" },
+  { name: "Switzerland",      code: "ch", emoji: "🇨🇭" },
+  { name: "Ukraine",          code: "ua", emoji: "🇺🇦" },
+  { name: "United Kingdom",   code: "gb", emoji: "🇬🇧" },
+  { name: "Vatican City",     code: "va", emoji: "🇻🇦" },
+];
+
+function flagUrl(code) {
+  return `https://flagcdn.com/w320/${code}.png`;
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+let deck = shuffle(countries);
+let index = 0;
+let revealed = false;
+
+const card       = document.getElementById('card');
+const flagImg    = document.getElementById('flagImg');
+const flagEmoji  = document.getElementById('flagEmoji');
+const countryName = document.getElementById('countryName');
+const btnReveal  = document.getElementById('btnReveal');
+const btnNext    = document.getElementById('btnNext');
+const progressLabel = document.getElementById('progressLabel');
+const progressFill  = document.getElementById('progressFill');
+const seenCount     = document.getElementById('seenCount');
+const remainCount   = document.getElementById('remainCount');
+
+function loadCard() {
+  if (index >= deck.length) { showCompletion(); return; }
+  revealed = false;
+  card.classList.remove('flipped');
+  const c = deck[index];
+  flagImg.src = flagUrl(c.code);
+  flagImg.alt = `Flag of ${c.name}`;
+  countryName.textContent = c.name;
+  flagEmoji.textContent = c.emoji;
+  btnReveal.style.display = '';
+  btnNext.style.display = 'none';
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = deck.length;
+  progressLabel.textContent = `${index + 1} of ${total}`;
+  progressFill.style.width = `${(index / total) * 100}%`;
+  seenCount.textContent = index;
+  remainCount.textContent = total - index;
+}
+
+function revealAnswer() {
+  if (revealed) return;
+  revealed = true;
+  card.classList.add('flipped');
+  btnReveal.style.display = 'none';
+  btnNext.style.display = '';
+}
+
+function nextCard() {
+  index++;
+  loadCard();
+}
+
+function shuffleDeck() {
+  deck = shuffle(countries);
+  index = 0;
+  loadCard();
+}
+
+function showCompletion() {
+  document.getElementById('cardStage').innerHTML = `
+    <div style="text-align:center; padding:3rem 1rem;">
+      <div style="font-size:3rem; margin-bottom:1rem;">🎉</div>
+      <h2 style="font-family:'Playfair Display',serif; color:var(--gold); font-size:2rem; margin-bottom:0.8rem;">Round Complete!</h2>
+      <p style="color:rgba(245,240,232,0.55); font-style:italic; font-size:1.1rem;">You've been through all 46 European flags.</p>
+    </div>`;
+  document.querySelector('.controls').innerHTML =
+    `<button class="btn-reveal" onclick="shuffleDeck(); document.getElementById('cardStage').replaceWith(origStage())">
+      ↺ Play Again
+    </button>`;
+}
+
+// Click card to flip/advance
+card.addEventListener('click', () => {
+  if (!revealed) revealAnswer();
+  else nextCard();
+});
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if (e.key === ' ' || e.key === 'Spacebar') { e.preventDefault(); if (!revealed) revealAnswer(); else nextCard(); }
+  if (e.key === 'ArrowRight') { if (revealed) nextCard(); }
+  if (e.key === 's' || e.key === 'S') shuffleDeck();
+});
+
+// Init
+loadCard();
+</script>
+
+</body>
+</html>
