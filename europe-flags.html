@@ -464,7 +464,11 @@ function revealAnswer() {
 
 function nextCard() {
   index++;
-  loadCard();
+  // Flip back to front first, then swap content halfway through
+  card.classList.remove('flipped');
+  setTimeout(() => {
+    loadCard();
+  }, 350); // half of the 0.7s transition
 }
 
 function shuffleDeck() {
