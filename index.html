@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>European Flag Flashcards</title>
+<title>World Flag Flashcards</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -27,14 +27,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 2rem 1rem;
+    padding: 2rem 1rem 3rem;
     font-family: 'Crimson Pro', serif;
   }
 
   header {
     text-align: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
   }
 
   header h1 {
@@ -53,9 +52,184 @@
     letter-spacing: 0.05em;
   }
 
-  /* Progress bar */
+  /* ── Tab nav ── */
+  .tab-nav {
+    display: flex;
+    gap: 0;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(200,169,81,0.3);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .tab-btn {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: transparent;
+    color: rgba(200,169,81,0.5);
+    border: none;
+    padding: 0.6rem 1.4rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-right: 1px solid rgba(200,169,81,0.3);
+  }
+
+  .tab-btn:last-child { border-right: none; }
+
+  .tab-btn.active {
+    background: rgba(200,169,81,0.12);
+    color: var(--gold);
+  }
+
+  .tab-btn:hover:not(.active) {
+    background: rgba(200,169,81,0.06);
+    color: rgba(200,169,81,0.75);
+  }
+
+  /* ── Views ── */
+  #view-quiz, #view-picker { width: min(560px, 96vw); }
+
+  /* ── Picker ── */
+  #view-picker { display: none; }
+
+  .region-block {
+    margin-bottom: 1.6rem;
+    border: 1px solid rgba(200,169,81,0.18);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .region-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.75rem 1.1rem;
+    background: rgba(200,169,81,0.07);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .region-header:hover { background: rgba(200,169,81,0.11); }
+
+  .region-header label {
+    font-family: 'Playfair Display', serif;
+    color: var(--gold);
+    font-size: 1rem;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    flex: 1;
+  }
+
+  .region-count {
+    font-size: 0.75rem;
+    color: rgba(245,240,232,0.35);
+    font-style: italic;
+    letter-spacing: 0.05em;
+  }
+
+  .region-body {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 0;
+  }
+
+  .country-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.45rem 1.1rem;
+    border-bottom: 1px solid rgba(200,169,81,0.07);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .country-item:hover { background: rgba(200,169,81,0.05); }
+
+  .country-item label {
+    color: rgba(245,240,232,0.7);
+    font-size: 0.9rem;
+    cursor: pointer;
+    flex: 1;
+  }
+
+  .country-item .flag-thumb {
+    width: 26px;
+    height: 17px;
+    object-fit: cover;
+    border-radius: 1px;
+    opacity: 0.85;
+  }
+
+  /* custom checkbox */
+  input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border: 1px solid rgba(200,169,81,0.4);
+    border-radius: 2px;
+    background: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+    transition: all 0.15s;
+  }
+
+  input[type="checkbox"]:checked {
+    background: var(--gold);
+    border-color: var(--gold);
+  }
+
+  input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 3px; top: 1px;
+    width: 5px; height: 8px;
+    border: 2px solid var(--ink);
+    border-top: none; border-left: none;
+    transform: rotate(45deg);
+  }
+
+  input[type="checkbox"]:indeterminate {
+    background: rgba(200,169,81,0.4);
+    border-color: var(--gold);
+  }
+
+  input[type="checkbox"]:indeterminate::after {
+    content: '';
+    position: absolute;
+    left: 2px; top: 5px;
+    width: 8px; height: 2px;
+    background: var(--ink);
+  }
+
+  .region-checkbox { transform: scale(1.2); }
+
+  .picker-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1.2rem;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+
+  .selected-summary {
+    color: rgba(245,240,232,0.45);
+    font-style: italic;
+    font-size: 0.9rem;
+  }
+
+  .selected-summary strong {
+    color: var(--gold-light);
+    font-style: normal;
+  }
+
+  /* ── Quiz view ── */
   .progress-wrap {
-    width: min(480px, 90vw);
+    width: 100%;
     margin-bottom: 1.8rem;
     display: flex;
     flex-direction: column;
@@ -85,10 +259,9 @@
     transition: width 0.5s cubic-bezier(.4,0,.2,1);
   }
 
-  /* Card */
   .card-stage {
     perspective: 1200px;
-    width: min(480px, 90vw);
+    width: 100%;
   }
 
   .card {
@@ -126,7 +299,6 @@
     padding: 1rem;
   }
 
-  /* Corner ornaments */
   .card-front::before, .card-front::after {
     content: '✦';
     position: absolute;
@@ -157,10 +329,15 @@
     line-height: 1.2;
   }
 
-  .country-flag-emoji {
-    font-size: 2rem;
-    opacity: 0.6;
+  .region-badge {
+    font-size: 0.7rem;
+    color: rgba(245,240,232,0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-style: italic;
   }
+
+  .country-flag-emoji { font-size: 2rem; opacity: 0.6; }
 
   .back-hint {
     font-size: 0.8rem;
@@ -170,7 +347,6 @@
     text-transform: uppercase;
   }
 
-  /* Controls */
   .controls {
     display: flex;
     gap: 1rem;
@@ -227,7 +403,25 @@
     border-color: rgba(245,240,232,0.3);
   }
 
-  /* Score */
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold) 0%, #a8862e 100%);
+    color: var(--ink);
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(200,169,81,0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(200,169,81,0.4);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: rgba(245,240,232,0.4);
+    border: 1px solid rgba(245,240,232,0.15);
+    font-size: 0.8rem;
+  }
+
   .score-row {
     margin-top: 1.5rem;
     display: flex;
@@ -235,9 +429,7 @@
     align-items: center;
   }
 
-  .score-item {
-    text-align: center;
-  }
+  .score-item { text-align: center; }
 
   .score-num {
     font-family: 'Playfair Display', serif;
@@ -260,29 +452,6 @@
     background: rgba(200,169,81,0.2);
   }
 
-  /* Completion */
-  .completion {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    text-align: center;
-  }
-
-  .completion.show { display: flex; }
-
-  .completion h2 {
-    font-family: 'Playfair Display', serif;
-    color: var(--gold);
-    font-size: 2rem;
-  }
-
-  .completion p {
-    color: rgba(245,240,232,0.6);
-    font-style: italic;
-  }
-
-  /* Keyboard hint */
   .kbd-hint {
     margin-top: 1.2rem;
     color: rgba(245,240,232,0.2);
@@ -300,109 +469,182 @@
     font-size: 0.7rem;
   }
 
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: rgba(245,240,232,0.4);
+    font-style: italic;
+    font-size: 1.05rem;
+  }
+
+  .empty-state a {
+    color: var(--gold);
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
   @media (max-width: 520px) {
     .controls { gap: 0.7rem; }
     button { padding: 0.65rem 1.1rem; font-size: 0.8rem; }
+    .region-body { grid-template-columns: 1fr 1fr; }
   }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>European Flag Flashcards</h1>
-  <p>Test your knowledge of the continent</p>
+  <h1>World Flag Flashcards</h1>
+  <p>Europe · Central America · South America</p>
 </header>
 
-<div class="progress-wrap">
-  <div class="progress-label" id="progressLabel">1 of 45</div>
-  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="showTab('quiz')">▶ Quiz</button>
+  <button class="tab-btn" onclick="showTab('picker')">☰ Choose Flags</button>
 </div>
 
-<div class="card-stage" id="cardStage">
-  <div class="card" id="card">
-    <div class="card-face card-front">
-      <img id="flagImg" src="" alt="Country flag">
+<!-- QUIZ VIEW -->
+<div id="view-quiz">
+  <div class="progress-wrap">
+    <div class="progress-label" id="progressLabel">1 of 0</div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+
+  <div class="card-stage">
+    <div class="card" id="card">
+      <div class="card-face card-front">
+        <img id="flagImg" src="" alt="Country flag">
+      </div>
+      <div class="card-face card-back">
+        <span class="country-flag-emoji" id="flagEmoji"></span>
+        <div class="country-name" id="countryName"></div>
+        <div class="region-badge" id="regionBadge"></div>
+        <div class="back-hint">click card or press space to continue</div>
+      </div>
     </div>
-    <div class="card-face card-back">
-      <span class="country-flag-emoji" id="flagEmoji"></span>
-      <div class="country-name" id="countryName"></div>
-      <div class="back-hint">click card or press space to continue</div>
+  </div>
+
+  <div class="controls">
+    <button class="btn-reveal" id="btnReveal" onclick="revealAnswer()">Reveal Answer</button>
+    <button class="btn-next" id="btnNext" onclick="nextCard()" style="display:none">Next Card →</button>
+    <button class="btn-shuffle" onclick="shuffleDeck()">⇄ Shuffle</button>
+  </div>
+
+  <div class="score-row">
+    <div class="score-item">
+      <span class="score-num" id="seenCount">0</span>
+      <span class="score-label">Seen</span>
+    </div>
+    <div class="score-divider"></div>
+    <div class="score-item">
+      <span class="score-num" id="remainCount">0</span>
+      <span class="score-label">Remaining</span>
     </div>
   </div>
-</div>
 
-<div class="controls">
-  <button class="btn-reveal" id="btnReveal" onclick="revealAnswer()">Reveal Answer</button>
-  <button class="btn-next" id="btnNext" onclick="nextCard()" style="display:none">Next Card →</button>
-  <button class="btn-shuffle" onclick="shuffleDeck()">⇄ Shuffle</button>
-</div>
-
-<div class="score-row">
-  <div class="score-item">
-    <span class="score-num" id="seenCount">0</span>
-    <span class="score-label">Seen</span>
-  </div>
-  <div class="score-divider"></div>
-  <div class="score-item">
-    <span class="score-num" id="remainCount">45</span>
-    <span class="score-label">Remaining</span>
+  <div class="kbd-hint">
+    <kbd>Space</kbd> reveal &nbsp;·&nbsp; <kbd>→</kbd> next &nbsp;·&nbsp; <kbd>S</kbd> shuffle
   </div>
 </div>
 
-<div class="kbd-hint">
-  <kbd>Space</kbd> reveal &nbsp;·&nbsp; <kbd>→</kbd> next &nbsp;·&nbsp; <kbd>S</kbd> shuffle
+<!-- PICKER VIEW -->
+<div id="view-picker">
+  <div id="pickerRegions"></div>
+  <div class="picker-footer">
+    <div class="selected-summary" id="selectedSummary"></div>
+    <button class="btn-primary" onclick="applyAndQuiz()">Start Quiz →</button>
+  </div>
 </div>
 
 <script>
-// --- Flag data: using flagcdn.com (free, no auth required) ---
-const countries = [
-  { name: "Albania",          code: "al", emoji: "🇦🇱" },
-  { name: "Andorra",          code: "ad", emoji: "🇦🇩" },
-  { name: "Austria",          code: "at", emoji: "🇦🇹" },
-  { name: "Belarus",          code: "by", emoji: "🇧🇾" },
-  { name: "Belgium",          code: "be", emoji: "🇧🇪" },
-  { name: "Bosnia & Herzegovina", code: "ba", emoji: "🇧🇦" },
-  { name: "Bulgaria",         code: "bg", emoji: "🇧🇬" },
-  { name: "Croatia",          code: "hr", emoji: "🇭🇷" },
-  { name: "Cyprus",           code: "cy", emoji: "🇨🇾" },
-  { name: "Czech Republic",   code: "cz", emoji: "🇨🇿" },
-  { name: "Denmark",          code: "dk", emoji: "🇩🇰" },
-  { name: "Estonia",          code: "ee", emoji: "🇪🇪" },
-  { name: "Finland",          code: "fi", emoji: "🇫🇮" },
-  { name: "France",           code: "fr", emoji: "🇫🇷" },
-  { name: "Germany",          code: "de", emoji: "🇩🇪" },
-  { name: "Greece",           code: "gr", emoji: "🇬🇷" },
-  { name: "Hungary",          code: "hu", emoji: "🇭🇺" },
-  { name: "Iceland",          code: "is", emoji: "🇮🇸" },
-  { name: "Ireland",          code: "ie", emoji: "🇮🇪" },
-  { name: "Italy",            code: "it", emoji: "🇮🇹" },
-  { name: "Kosovo",           code: "xk", emoji: "🇽🇰" },
-  { name: "Latvia",           code: "lv", emoji: "🇱🇻" },
-  { name: "Liechtenstein",    code: "li", emoji: "🇱🇮" },
-  { name: "Lithuania",        code: "lt", emoji: "🇱🇹" },
-  { name: "Luxembourg",       code: "lu", emoji: "🇱🇺" },
-  { name: "Malta",            code: "mt", emoji: "🇲🇹" },
-  { name: "Moldova",          code: "md", emoji: "🇲🇩" },
-  { name: "Monaco",           code: "mc", emoji: "🇲🇨" },
-  { name: "Montenegro",       code: "me", emoji: "🇲🇪" },
-  { name: "Netherlands",      code: "nl", emoji: "🇳🇱" },
-  { name: "North Macedonia",  code: "mk", emoji: "🇲🇰" },
-  { name: "Norway",           code: "no", emoji: "🇳🇴" },
-  { name: "Poland",           code: "pl", emoji: "🇵🇱" },
-  { name: "Portugal",         code: "pt", emoji: "🇵🇹" },
-  { name: "Romania",          code: "ro", emoji: "🇷🇴" },
-  { name: "Russia",           code: "ru", emoji: "🇷🇺" },
-  { name: "San Marino",       code: "sm", emoji: "🇸🇲" },
-  { name: "Serbia",           code: "rs", emoji: "🇷🇸" },
-  { name: "Slovakia",         code: "sk", emoji: "🇸🇰" },
-  { name: "Slovenia",         code: "si", emoji: "🇸🇮" },
-  { name: "Spain",            code: "es", emoji: "🇪🇸" },
-  { name: "Sweden",           code: "se", emoji: "🇸🇪" },
-  { name: "Switzerland",      code: "ch", emoji: "🇨🇭" },
-  { name: "Ukraine",          code: "ua", emoji: "🇺🇦" },
-  { name: "United Kingdom",   code: "gb", emoji: "🇬🇧" },
-  { name: "Vatican City",     code: "va", emoji: "🇻🇦" },
+// ── Country data ──────────────────────────────────────────────
+const ALL_COUNTRIES = [
+  // Europe
+  { name: "Albania",               code: "al", emoji: "🇦🇱", region: "Europe" },
+  { name: "Andorra",               code: "ad", emoji: "🇦🇩", region: "Europe" },
+  { name: "Austria",               code: "at", emoji: "🇦🇹", region: "Europe" },
+  { name: "Belarus",               code: "by", emoji: "🇧🇾", region: "Europe" },
+  { name: "Belgium",               code: "be", emoji: "🇧🇪", region: "Europe" },
+  { name: "Bosnia & Herzegovina",  code: "ba", emoji: "🇧🇦", region: "Europe" },
+  { name: "Bulgaria",              code: "bg", emoji: "🇧🇬", region: "Europe" },
+  { name: "Croatia",               code: "hr", emoji: "🇭🇷", region: "Europe" },
+  { name: "Cyprus",                code: "cy", emoji: "🇨🇾", region: "Europe" },
+  { name: "Czech Republic",        code: "cz", emoji: "🇨🇿", region: "Europe" },
+  { name: "Denmark",               code: "dk", emoji: "🇩🇰", region: "Europe" },
+  { name: "Estonia",               code: "ee", emoji: "🇪🇪", region: "Europe" },
+  { name: "Finland",               code: "fi", emoji: "🇫🇮", region: "Europe" },
+  { name: "France",                code: "fr", emoji: "🇫🇷", region: "Europe" },
+  { name: "Germany",               code: "de", emoji: "🇩🇪", region: "Europe" },
+  { name: "Greece",                code: "gr", emoji: "🇬🇷", region: "Europe" },
+  { name: "Hungary",               code: "hu", emoji: "🇭🇺", region: "Europe" },
+  { name: "Iceland",               code: "is", emoji: "🇮🇸", region: "Europe" },
+  { name: "Ireland",               code: "ie", emoji: "🇮🇪", region: "Europe" },
+  { name: "Italy",                 code: "it", emoji: "🇮🇹", region: "Europe" },
+  { name: "Kosovo",                code: "xk", emoji: "🇽🇰", region: "Europe" },
+  { name: "Latvia",                code: "lv", emoji: "🇱🇻", region: "Europe" },
+  { name: "Liechtenstein",         code: "li", emoji: "🇱🇮", region: "Europe" },
+  { name: "Lithuania",             code: "lt", emoji: "🇱🇹", region: "Europe" },
+  { name: "Luxembourg",            code: "lu", emoji: "🇱🇺", region: "Europe" },
+  { name: "Malta",                 code: "mt", emoji: "🇲🇹", region: "Europe" },
+  { name: "Moldova",               code: "md", emoji: "🇲🇩", region: "Europe" },
+  { name: "Monaco",                code: "mc", emoji: "🇲🇨", region: "Europe" },
+  { name: "Montenegro",            code: "me", emoji: "🇲🇪", region: "Europe" },
+  { name: "Netherlands",           code: "nl", emoji: "🇳🇱", region: "Europe" },
+  { name: "North Macedonia",       code: "mk", emoji: "🇲🇰", region: "Europe" },
+  { name: "Norway",                code: "no", emoji: "🇳🇴", region: "Europe" },
+  { name: "Poland",                code: "pl", emoji: "🇵🇱", region: "Europe" },
+  { name: "Portugal",              code: "pt", emoji: "🇵🇹", region: "Europe" },
+  { name: "Romania",               code: "ro", emoji: "🇷🇴", region: "Europe" },
+  { name: "Russia",                code: "ru", emoji: "🇷🇺", region: "Europe" },
+  { name: "San Marino",            code: "sm", emoji: "🇸🇲", region: "Europe" },
+  { name: "Serbia",                code: "rs", emoji: "🇷🇸", region: "Europe" },
+  { name: "Slovakia",              code: "sk", emoji: "🇸🇰", region: "Europe" },
+  { name: "Slovenia",              code: "si", emoji: "🇸🇮", region: "Europe" },
+  { name: "Spain",                 code: "es", emoji: "🇪🇸", region: "Europe" },
+  { name: "Sweden",                code: "se", emoji: "🇸🇪", region: "Europe" },
+  { name: "Switzerland",           code: "ch", emoji: "🇨🇭", region: "Europe" },
+  { name: "Ukraine",               code: "ua", emoji: "🇺🇦", region: "Europe" },
+  { name: "United Kingdom",        code: "gb", emoji: "🇬🇧", region: "Europe" },
+  { name: "Vatican City",          code: "va", emoji: "🇻🇦", region: "Europe" },
+
+  // Central America (incl. Caribbean & Mexico)
+  { name: "Belize",                code: "bz", emoji: "🇧🇿", region: "Central America" },
+  { name: "Costa Rica",            code: "cr", emoji: "🇨🇷", region: "Central America" },
+  { name: "Cuba",                  code: "cu", emoji: "🇨🇺", region: "Central America" },
+  { name: "Dominican Republic",    code: "do", emoji: "🇩🇴", region: "Central America" },
+  { name: "El Salvador",           code: "sv", emoji: "🇸🇻", region: "Central America" },
+  { name: "Guatemala",             code: "gt", emoji: "🇬🇹", region: "Central America" },
+  { name: "Haiti",                 code: "ht", emoji: "🇭🇹", region: "Central America" },
+  { name: "Honduras",              code: "hn", emoji: "🇭🇳", region: "Central America" },
+  { name: "Jamaica",               code: "jm", emoji: "🇯🇲", region: "Central America" },
+  { name: "Mexico",                code: "mx", emoji: "🇲🇽", region: "Central America" },
+  { name: "Nicaragua",             code: "ni", emoji: "🇳🇮", region: "Central America" },
+  { name: "Panama",                code: "pa", emoji: "🇵🇦", region: "Central America" },
+  { name: "Puerto Rico",           code: "pr", emoji: "🇵🇷", region: "Central America" },
+  { name: "Trinidad & Tobago",     code: "tt", emoji: "🇹🇹", region: "Central America" },
+
+  // South America
+  { name: "Argentina",             code: "ar", emoji: "🇦🇷", region: "South America" },
+  { name: "Bolivia",               code: "bo", emoji: "🇧🇴", region: "South America" },
+  { name: "Brazil",                code: "br", emoji: "🇧🇷", region: "South America" },
+  { name: "Chile",                 code: "cl", emoji: "🇨🇱", region: "South America" },
+  { name: "Colombia",              code: "co", emoji: "🇨🇴", region: "South America" },
+  { name: "Ecuador",               code: "ec", emoji: "🇪🇨", region: "South America" },
+  { name: "Guyana",                code: "gy", emoji: "🇬🇾", region: "South America" },
+  { name: "Paraguay",              code: "py", emoji: "🇵🇾", region: "South America" },
+  { name: "Peru",                  code: "pe", emoji: "🇵🇪", region: "South America" },
+  { name: "Suriname",              code: "sr", emoji: "🇸🇷", region: "South America" },
+  { name: "Uruguay",               code: "uy", emoji: "🇺🇾", region: "South America" },
+  { name: "Venezuela",             code: "ve", emoji: "🇻🇪", region: "South America" },
 ];
+
+const REGIONS = ["Europe", "Central America", "South America"];
+
+// ── State ────────────────────────────────────────────────────
+// selected: Set of country codes currently in the deck
+let selected = new Set(ALL_COUNTRIES.map(c => c.code)); // all on by default
+let deck = [];
+let index = 0;
+let revealed = false;
 
 function flagUrl(code) {
   return `https://flagcdn.com/w320/${code}.png`;
@@ -417,94 +659,221 @@ function shuffle(arr) {
   return a;
 }
 
-let deck = shuffle(countries);
-let index = 0;
-let revealed = false;
+// ── Picker ────────────────────────────────────────────────────
+function buildPicker() {
+  const container = document.getElementById('pickerRegions');
+  container.innerHTML = '';
 
-const card       = document.getElementById('card');
-const flagImg    = document.getElementById('flagImg');
-const flagEmoji  = document.getElementById('flagEmoji');
-const countryName = document.getElementById('countryName');
-const btnReveal  = document.getElementById('btnReveal');
-const btnNext    = document.getElementById('btnNext');
-const progressLabel = document.getElementById('progressLabel');
-const progressFill  = document.getElementById('progressFill');
-const seenCount     = document.getElementById('seenCount');
-const remainCount   = document.getElementById('remainCount');
+  REGIONS.forEach(region => {
+    const countries = ALL_COUNTRIES.filter(c => c.region === region);
+    const regionId = region.replace(/\s+/g, '-');
+
+    const block = document.createElement('div');
+    block.className = 'region-block';
+
+    // Header
+    const header = document.createElement('div');
+    header.className = 'region-header';
+    header.innerHTML = `
+      <input type="checkbox" class="region-checkbox" id="region-${regionId}" data-region="${region}">
+      <label for="region-${regionId}">${region}</label>
+      <span class="region-count" id="count-${regionId}"></span>
+    `;
+    block.appendChild(header);
+
+    // Country list
+    const body = document.createElement('div');
+    body.className = 'region-body';
+
+    countries.forEach(c => {
+      const item = document.createElement('div');
+      item.className = 'country-item';
+      item.innerHTML = `
+        <input type="checkbox" id="cb-${c.code}" data-code="${c.code}" data-region="${region}" ${selected.has(c.code) ? 'checked' : ''}>
+        <img class="flag-thumb" src="${flagUrl(c.code)}" alt="">
+        <label for="cb-${c.code}">${c.name}</label>
+      `;
+      body.appendChild(item);
+
+      item.querySelector('input').addEventListener('change', e => {
+        if (e.target.checked) selected.add(c.code);
+        else selected.delete(c.code);
+        updateRegionCheckbox(region);
+        updateSummary();
+      });
+    });
+
+    block.appendChild(body);
+    container.appendChild(block);
+
+    // Region master checkbox logic
+    const regionCb = header.querySelector('input');
+    regionCb.addEventListener('change', e => {
+      const checked = e.target.checked;
+      countries.forEach(c => {
+        if (checked) selected.add(c.code);
+        else selected.delete(c.code);
+      });
+      // update individual checkboxes
+      body.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = checked);
+      updateRegionCheckbox(region);
+      updateSummary();
+    });
+
+    updateRegionCheckbox(region);
+  });
+
+  updateSummary();
+}
+
+function updateRegionCheckbox(region) {
+  const regionId = region.replace(/\s+/g, '-');
+  const countries = ALL_COUNTRIES.filter(c => c.region === region);
+  const checkedCount = countries.filter(c => selected.has(c.code)).length;
+  const cb = document.getElementById(`region-${regionId}`);
+  const countEl = document.getElementById(`count-${regionId}`);
+
+  if (checkedCount === 0) {
+    cb.checked = false;
+    cb.indeterminate = false;
+  } else if (checkedCount === countries.length) {
+    cb.checked = true;
+    cb.indeterminate = false;
+  } else {
+    cb.checked = false;
+    cb.indeterminate = true;
+  }
+  countEl.textContent = `${checkedCount} / ${countries.length}`;
+}
+
+function updateSummary() {
+  document.getElementById('selectedSummary').innerHTML =
+    `<strong>${selected.size}</strong> flag${selected.size !== 1 ? 's' : ''} selected`;
+}
+
+function applyAndQuiz() {
+  if (selected.size === 0) {
+    alert('Please select at least one country.');
+    return;
+  }
+  showTab('quiz');
+  startDeck();
+}
+
+// ── Quiz ──────────────────────────────────────────────────────
+function startDeck() {
+  const activeDeck = ALL_COUNTRIES.filter(c => selected.has(c.code));
+  deck = shuffle(activeDeck);
+  index = 0;
+  loadCard();
+}
 
 function loadCard() {
-  if (index >= deck.length) { showCompletion(); return; }
   revealed = false;
+  const card = document.getElementById('card');
   card.classList.remove('flipped');
+
+  if (index >= deck.length) { showCompletion(); return; }
+
   const c = deck[index];
-  flagImg.src = flagUrl(c.code);
-  flagImg.alt = `Flag of ${c.name}`;
-  countryName.textContent = c.name;
-  flagEmoji.textContent = c.emoji;
-  btnReveal.style.display = '';
-  btnNext.style.display = 'none';
+  document.getElementById('flagImg').src = flagUrl(c.code);
+  document.getElementById('flagImg').alt = `Flag of ${c.name}`;
+  document.getElementById('countryName').textContent = c.name;
+  document.getElementById('flagEmoji').textContent = c.emoji;
+  document.getElementById('regionBadge').textContent = c.region;
+  document.getElementById('btnReveal').style.display = '';
+  document.getElementById('btnNext').style.display = 'none';
+
+  // Restore card HTML if we replaced it during completion
+  const stage = document.querySelector('.card-stage');
+  if (!stage.querySelector('.card')) {
+    stage.innerHTML = `
+      <div class="card" id="card">
+        <div class="card-face card-front"><img id="flagImg" src="" alt=""></div>
+        <div class="card-face card-back">
+          <span class="country-flag-emoji" id="flagEmoji"></span>
+          <div class="country-name" id="countryName"></div>
+          <div class="region-badge" id="regionBadge"></div>
+          <div class="back-hint">click card or press space to continue</div>
+        </div>
+      </div>`;
+    attachCardClick();
+  }
+
   updateProgress();
 }
 
 function updateProgress() {
   const total = deck.length;
-  progressLabel.textContent = `${index + 1} of ${total}`;
-  progressFill.style.width = `${(index / total) * 100}%`;
-  seenCount.textContent = index;
-  remainCount.textContent = total - index;
+  document.getElementById('progressLabel').textContent = `${index + 1} of ${total}`;
+  document.getElementById('progressFill').style.width = `${(index / total) * 100}%`;
+  document.getElementById('seenCount').textContent = index;
+  document.getElementById('remainCount').textContent = total - index;
 }
 
 function revealAnswer() {
   if (revealed) return;
   revealed = true;
-  card.classList.add('flipped');
-  btnReveal.style.display = 'none';
-  btnNext.style.display = '';
+  document.getElementById('card').classList.add('flipped');
+  document.getElementById('btnReveal').style.display = 'none';
+  document.getElementById('btnNext').style.display = '';
 }
 
 function nextCard() {
   index++;
-  // Flip back to front first, then swap content halfway through
+  const card = document.getElementById('card');
   card.classList.remove('flipped');
-  setTimeout(() => {
-    loadCard();
-  }, 350); // half of the 0.7s transition
+  setTimeout(() => { loadCard(); }, 350);
 }
 
 function shuffleDeck() {
-  deck = shuffle(countries);
-
+  deck = shuffle(deck);
+  index = 0;
   loadCard();
 }
 
 function showCompletion() {
-  document.getElementById('cardStage').innerHTML = `
-    <div style="text-align:center; padding:3rem 1rem;">
+  document.querySelector('.card-stage').innerHTML = `
+    <div style="text-align:center; padding:3rem 1rem; border:1px solid rgba(200,169,81,0.18); border-radius:6px;">
       <div style="font-size:3rem; margin-bottom:1rem;">🎉</div>
       <h2 style="font-family:'Playfair Display',serif; color:var(--gold); font-size:2rem; margin-bottom:0.8rem;">Round Complete!</h2>
-      <p style="color:rgba(245,240,232,0.55); font-style:italic; font-size:1.1rem;">You've been through all 46 European flags.</p>
+      <p style="color:rgba(245,240,232,0.55); font-style:italic; font-size:1.1rem;">You've been through all ${deck.length} flags.</p>
     </div>`;
-  document.querySelector('.controls').innerHTML =
-    `<button class="btn-reveal" onclick="shuffleDeck(); document.getElementById('cardStage').replaceWith(origStage())">
-      ↺ Play Again
-    </button>`;
+  document.getElementById('btnReveal').style.display = 'none';
+  document.getElementById('btnNext').style.display = 'none';
 }
 
-// Click card to flip/advance
-card.addEventListener('click', () => {
-  if (!revealed) revealAnswer();
-  else nextCard();
-});
+function attachCardClick() {
+  const card = document.getElementById('card');
+  if (card) {
+    card.addEventListener('click', () => {
+      if (!revealed) revealAnswer(); else nextCard();
+    });
+  }
+}
 
-// Keyboard
+// ── Tab switching ─────────────────────────────────────────────
+function showTab(tab) {
+  document.getElementById('view-quiz').style.display   = tab === 'quiz'   ? '' : 'none';
+  document.getElementById('view-picker').style.display = tab === 'picker' ? '' : 'none';
+  document.querySelectorAll('.tab-btn').forEach((b, i) => {
+    b.classList.toggle('active', (i === 0 && tab === 'quiz') || (i === 1 && tab === 'picker'));
+  });
+  // Coming back to picker restarts session when they hit Start Quiz
+}
+
+// ── Keyboard ──────────────────────────────────────────────────
 document.addEventListener('keydown', e => {
+  if (document.getElementById('view-quiz').style.display === 'none') return;
   if (e.key === ' ' || e.key === 'Spacebar') { e.preventDefault(); if (!revealed) revealAnswer(); else nextCard(); }
   if (e.key === 'ArrowRight') { if (revealed) nextCard(); }
   if (e.key === 's' || e.key === 'S') shuffleDeck();
 });
 
-// Init
-loadCard();
+// ── Init ──────────────────────────────────────────────────────
+buildPicker();
+startDeck();
+attachCardClick();
 </script>
 
 </body>
