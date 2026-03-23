@@ -854,8 +854,8 @@ function attachCardClick() {
 
 // ── Tab switching ─────────────────────────────────────────────
 function showTab(tab) {
-  document.getElementById('view-quiz').style.display   = tab === 'quiz'   ? '' : 'none';
-  document.getElementById('view-picker').style.display = tab === 'picker' ? '' : 'none';
+  document.getElementById('view-quiz').style.display   = tab === 'quiz'   ? 'block' : 'none';
+  document.getElementById('view-picker').style.display = tab === 'picker' ? 'block' : 'none';
   document.querySelectorAll('.tab-btn').forEach((b, i) => {
     b.classList.toggle('active', (i === 0 && tab === 'quiz') || (i === 1 && tab === 'picker'));
   });
